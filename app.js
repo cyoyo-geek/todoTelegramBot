@@ -68,7 +68,7 @@ bot.onText(/\/todo/, msg => {
 });
 
 
-const port = process.evn.PORT;
+const port = process.env.PORT;
 
 app.get('/', (req, res) => {
     res.end("Telegram Todo Bot");
