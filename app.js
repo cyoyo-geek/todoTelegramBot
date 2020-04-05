@@ -79,7 +79,7 @@ bot.onText(/\/list/, msg => {
                 if(user.todos.length === 0) return bot.sendMessage(msg.chat.id, '*You already done all your todos*'
                 , { parse_mode: "Markdown"});
                 // List user's todos
-                
+                let todoList = '';
                 user.todos.forEach(
                     (todo, index) => {
                         todoList += `[${index}] - `  + todo + "\n";
@@ -91,6 +91,48 @@ bot.onText(/\/list/, msg => {
         }
     );
 });
+
+
+//Check Command
+bot.onText(/\/check/, msg => {
+    User.findOne({user: msg.chat.username})
+    .then(
+        user => {
+            if(!user) {
+                return bot.sendMessage(chatId, "You should\t added a todo item");
+            } else {
+                if(user.todos.length === 0) return bot.sendMessage(msg.chat.id, '*You already done all your todos*'
+                , { parse_mode: "Markdown"});
+                
+                let num = msg.text.split(' ')[1];
+
+                //No num passed in
+                if(!num){
+                    return bot.sendMessage(msg.chat.id, 
+                        'You should give me the todo number'); 
+                }
+
+                // Wrong number
+                if(!num >= user.todos.length){
+                    return bot.sendMessage(msg.chat.id, 
+                        "Opps. There's no todo with the number, please type /list and check it again."); 
+                }
+
+                // Remove todo from mongoDB
+                user.todos.splice(num, 1);
+                User.update({
+                    user: user.user
+                }, {
+                    $set: {todos: user.todos}
+                },(err, raw) => {
+                    if(err) return console.log(err);
+                    bot.sendMessage(msg.chat.id, "DONE!");
+                });
+            }
+        }
+    );
+});
+
 
 
 const port = process.env.PORT;
