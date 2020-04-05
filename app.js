@@ -68,6 +68,31 @@ bot.onText(/\/todo/, msg => {
 });
 
 
+//List Command
+bot.onText(/\/list/, msg => {
+    User.findOne({user: msg.chat.username})
+    .then(
+        user => {
+            if(!user) {
+                return bot.sendMessage(chatId, "You should\t added a todo item");
+            } else {
+                if(user.todos.length === 0) return bot.sendMessage(msg.chat.id, '*You already done all your todos*'
+                , { parse_mode: "Markdown"});
+                // List user's todos
+                
+                user.todos.forEach(
+                    (todo, index) => {
+                        todoList += `[${index}] - `  + todo + "\n";
+                    }
+                );
+                return bot.sendMessage(msg.chat.id, "*Your Todo List:\n\n*${}"
+                , { parse_mode: "Markdown"});
+            }
+        }
+    );
+});
+
+
 const port = process.env.PORT;
 
 app.get('/', (req, res) => {
