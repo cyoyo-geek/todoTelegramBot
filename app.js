@@ -70,13 +70,14 @@ bot.onText(/\/todo/, msg => {
 
 //List Command
 bot.onText(/\/list/, msg => {
+    const chatId = msg.chat.id;
     User.findOne({user: msg.chat.username})
     .then(
         user => {
             if(!user) {
                 return bot.sendMessage(chatId, "You should\t added a todo item");
             } else {
-                if(user.todos.length === 0) return bot.sendMessage(msg.chat.id, '*You already done all your todos*'
+                if(user.todos.length === 0) return bot.sendMessage(chatId, '*You already done all your todos*'
                 , { parse_mode: "Markdown"});
                 // List user's todos
                 let todoList = '';
@@ -85,7 +86,7 @@ bot.onText(/\/list/, msg => {
                         todoList += `[${index}] - `  + todo + "\n";
                     }
                 );
-                return bot.sendMessage(msg.chat.id, "*Your Todo List:\n\n*${}"
+                return bot.sendMessage(chatId, "*Your Todo List:\n\n*${}"
                 , { parse_mode: "Markdown"});
             }
         }
@@ -95,6 +96,7 @@ bot.onText(/\/list/, msg => {
 
 //Check Command
 bot.onText(/\/check/, msg => {
+    const chatId = msg.chat.id;
     User.findOne({user: msg.chat.username})
     .then(
         user => {
@@ -108,13 +110,13 @@ bot.onText(/\/check/, msg => {
 
                 //No num passed in
                 if(!num){
-                    return bot.sendMessage(msg.chat.id, 
+                    return bot.sendMessage(chatId, 
                         'You should give me the todo number'); 
                 }
 
                 // Wrong number
                 if(!num >= user.todos.length){
-                    return bot.sendMessage(msg.chat.id, 
+                    return bot.sendMessage(chatId, 
                         "Opps. There's no todo with the number, please type /list and check it again."); 
                 }
 
