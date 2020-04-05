@@ -9,10 +9,10 @@ const UserSchema = new Schema(
             type: String,
             required: true
         },
-        todos: {
+        todos: [{
             type: String,
             required: true
-        }
+        }]
     }
 );
 
