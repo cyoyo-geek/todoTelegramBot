@@ -86,7 +86,7 @@ bot.onText(/\/list/, msg => {
                         todoList += `[${index}] - `  + todo + "\n";
                     }
                 );
-                return bot.sendMessage(chatId, "*Your Todo List:\n\n*${}"
+                return bot.sendMessage(chatId, `*Your Todo List:\n\n*${todoList}`
                 , { parse_mode: "Markdown"});
             }
         }
